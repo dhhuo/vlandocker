@@ -30,4 +30,4 @@ jobs:
         with:
           name: luci-app-vlandocker-ipk
           path: bin/packages/x86_64/luci/luci-app-vlandocker_*.ipk
-        uses: actions/upload-artifact@v2
+       - uses: actions/upload-artifact@v2
