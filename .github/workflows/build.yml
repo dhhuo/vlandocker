@@ -1,0 +1,32 @@
+name: Build luci-app-vlandocker IPK
+
+on:
+  push:
+    branches:
+      - main  # 或者您使用的其他分支
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v3
+
+      - name: 设置 OpenWrt SDK
+        run: |
+          wget https://downloads.openwrt.org/releases/22.03.7/targets/x86/64/openwrt-sdk-22.03.7-x86-64_gcc-11.2.0_musl.Linux-x86_64.tar.xz
+          tar -xf openwrt-sdk-22.03.7-x86-64_gcc-11.2.0_musl.Linux-x86_64.tar.xz
+          mv openwrt-sdk-22.03.7-x86-64_gcc-11.2.0_musl.Linux-x86_64 openwrt-sdk
+
+      - name: 构建 luci-app-vlandocker
+        run: |
+          cd openwrt-sdk
+          ./scripts/feeds update -a
+          ./scripts/feeds install -a
+          make package/luci-app-vlandocker/compile V=s
+
+      - name: 上传构建产物
+        uses: actions/upload-artifact@v3
+        with:
+          name: luci-app-vlandocker-ipk
+          path: bin/packages/x86_64/luci/luci-app-vlandocker_*.ipk
