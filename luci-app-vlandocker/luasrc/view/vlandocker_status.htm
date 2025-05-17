@@ -1,0 +1,13 @@
+<%+header%>
+<h2>VLAN Docker 配置执行状态</h2>
+<pre id="log" style="background:#f0f0f0; padding:10px; height:300px; overflow:auto;"></pre>
+<script>
+function loadLog() {
+  fetch('/tmp/vlandocker.log').then(r => r.text()).then(t => {
+    document.getElementById('log').textContent = t;
+  });
+}
+setInterval(loadLog, 2000);
+loadLog();
+</script>
+<%+footer%>
